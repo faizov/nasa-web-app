@@ -1,0 +1,20 @@
+:root {
+    --primary-color: #0b3d91;
+    --secondary-color: #d2d6d9;
+    --bg-color: #fff;
+    --text-color: #000;
+}
+
+.dark-mode {
+    --primary-color: #ffffff;
+    --secondary-color: #212529;
+    --bg-color: #151418;
+    --text-color: #fff;
+}
+
+.btnThemeMode {
+    position: absolute;
+    bottom: 15px;
+    left: 20px;
+    padding: 5px;
+}
