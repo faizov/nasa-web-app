@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import { Apod } from "./features/apod/apod";
 
-import LogoImg from "./assets/images/logoSvg.svg";
+import LogoDarkImg from "./assets/images/logo-dark.png";
+import LogoLightImg from "./assets/images/logo-light.png";
+import IconSun from "./assets/icons/icon-sun.svg";
+import IconMoon from "./assets/icons/icon-moon.svg";
 
 import "./styles.scss";
 
@@ -24,8 +27,17 @@ function App(): JSX.Element {
   return (
     <div className={darkMode ? "dark-mode" : ""}>
       <div className="App">
-        <div className="logo">
-          <img src={LogoImg} alt="" />
+        <div className="header">
+          <div className="logo">
+            <img src={darkMode ? LogoDarkImg : LogoLightImg} alt="" />
+          </div>
+          <label className="switch">
+            <input type="checkbox" onChange={() => toggleDarkMode()}/>
+            <span className="slider round">
+              <img src={IconSun} alt="" />
+              <img src={IconMoon} alt="" />
+            </span>
+          </label>
         </div>
         <Routes>
           <Route path="/" element={<Layout />}>
