@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Counter from "./features/counter/Counter";
-import { ApodFull } from "./features/apod/apodFull";
+import { Routes, Route, Outlet, Link } from "react-router-dom";
 import { Apod } from "./features/apod/apod";
+
+import LogoImg from "./assets/images/logoSvg.svg";
+
 import "./styles.scss";
-import ThemeIcon from "./theme.png";
 
 function App(): JSX.Element {
   const savedDarkMode = JSON.parse(localStorage.getItem("darkMode") ?? "false");
 
-  // начальное значение состояния будет равно сохраненной теме из локального хранилища или
-  // настройкам устройства по умолчанию, если сохраненная тема не определена
   const [darkMode, setDarkMode] = useState(
     savedDarkMode ?? window.matchMedia("(prefers-color-scheme: dark)").matches
   );
@@ -23,16 +22,42 @@ function App(): JSX.Element {
   };
 
   return (
-    <div className="App">
-      {/* <Counter /> */}
-      {/* <ApodFull /> */}
-
-      <div className={darkMode ? "dark-mode" : ""}>
-        <button className="btnThemeMode" onClick={toggleDarkMode}>
-          <img src={ThemeIcon} alt="" width={30}/>
-        </button>
-        <Apod />
+    <div className={darkMode ? "dark-mode" : ""}>
+      <div className="App">
+        <div className="logo">
+          <img src={LogoImg} alt="" />
+        </div>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Apod />} />
+          </Route>
+        </Routes>
       </div>
+    </div>
+  );
+}
+
+function Layout() {
+  return (
+    <div>
+      {/* <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/dashboard">Dashboard</Link>
+          </li>
+          <li>
+            <Link to="/nothing-here">Nothing Here</Link>
+          </li>
+        </ul>
+      </nav> */}
+
+      <Outlet />
     </div>
   );
 }
