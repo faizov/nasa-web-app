@@ -1,19 +1,37 @@
 import React, { useEffect, useState } from "react";
+import Scrollbars from "react-custom-scrollbars-2";
 import { useGetApodQuery, useLazyGetApodRandomQuery } from "./apodApi";
 
+import {
+  addOrRemoveItemLocalStorage,
+  findObjectInLocalStorageArray,
+} from "../../utils/localStorage";
+
+import IconHeart from "../../assets/icons/icon-heart.svg";
+import IconHeartActive from "../../assets/icons/icon-heart-active.svg";
+
 import "./styles.scss";
-import Scrollbars from "react-custom-scrollbars-2";
 
 export const Apod = () => {
   const { data, error, isLoading } = useGetApodQuery("");
   const [apod, setApod] = useState(data);
   const [trigger] = useLazyGetApodRandomQuery();
 
+  const [liked, setLiked] = useState(false);
+
   useEffect(() => {
     if (data) {
       setApod(data);
     }
   }, [data, isLoading]);
+
+  useEffect(() => {
+    if (apod) {
+      const likeItem = findObjectInLocalStorageArray("likesApod", apod.date);
+      console.log('likeItem', likeItem)
+      setLiked(Boolean(likeItem));
+    }
+  }, [apod]);
 
   if (error || !data || !apod) {
     return <div>error</div>;
@@ -32,10 +50,26 @@ export const Apod = () => {
     }
   };
 
+  const onClickLike = () => {
+    setLiked(!liked);
+
+    addOrRemoveItemLocalStorage("likesApod", apod, liked);
+  };
+
   return (
     <div className="apod">
       <div className="info">
-        <span className="date">{apod.date}</span>
+        <div className="info__header">
+          <span className="date">{apod.date}</span>
+          <div>
+            <button
+              className={`info__header__like ${liked ? "active" : ""}`}
+              onClick={() => onClickLike()}
+            >
+              <img src={liked ? IconHeartActive : IconHeart} alt="" />
+            </button>
+          </div>
+        </div>
 
         <div className="title">
           <h1>{apod.title}</h1>
