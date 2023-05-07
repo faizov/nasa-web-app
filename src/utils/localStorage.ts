@@ -1,4 +1,4 @@
-export const addOrRemoveItemLocalStorage = <T extends { date: string }>(
+export const addOrRemoveItemLocalStorage = <T extends { id: string }>(
   key: string,
   item: T,
   removeItem = false
@@ -8,7 +8,7 @@ export const addOrRemoveItemLocalStorage = <T extends { date: string }>(
   if (existingData) {
     const existingArray = JSON.parse(existingData) as T[];
     const existingItemIndex = existingArray.findIndex(
-      (existingItem) => existingItem.date === item.date
+      (existingItem) => existingItem.id === item.id
     );
 
     if (existingItemIndex !== -1) {

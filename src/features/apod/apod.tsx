@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Scrollbars from "react-custom-scrollbars-2";
-import { useGetApodQuery, useLazyGetApodRandomQuery } from "./apodApi";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+import {
+  useGetApodQuery,
+  useLazyGetApodRandomQuery,
+  useLazyGetApodDateQuery,
+} from "./apodApi";
 
 import {
   addOrRemoveItemLocalStorage,
@@ -15,9 +22,15 @@ import "./styles.scss";
 export const Apod = () => {
   const { data, error, isLoading } = useGetApodQuery("");
   const [apod, setApod] = useState(data);
-  const [trigger] = useLazyGetApodRandomQuery();
+  const [clickRandom] = useLazyGetApodRandomQuery();
+  const [clickDate] = useLazyGetApodDateQuery();
 
   const [liked, setLiked] = useState(false);
+
+  const isDisabledNextDate =
+    apod && new Date(apod.date).toDateString() === new Date().toDateString();
+  const isDisabledBackDate =
+    apod && new Date(apod.date) <= new Date("1995-06-16");
 
   useEffect(() => {
     if (data) {
@@ -28,39 +41,80 @@ export const Apod = () => {
   useEffect(() => {
     if (apod) {
       const likeItem = findObjectInLocalStorageArray("likesApod", apod.date);
-      console.log('likeItem', likeItem)
+
       setLiked(Boolean(likeItem));
     }
   }, [apod]);
 
-  if (error || !data || !apod) {
-    return <div>error</div>;
-  }
-
-  if (isLoading) {
-    return <></>;
-  }
-
-  const onClickHandler = async () => {
-    const result = await trigger("");
+  const onClickRandom = async () => {
+    const result = await clickRandom("");
 
     if (result) {
-      console.log("result", result);
+
       setApod(result.data[0]);
+    }
+  };
+
+  const onClickNextorPrevDate = async (direction: boolean) => {
+    const date = new Date(apod.date);
+    const operation = direction ? 1 : -1;
+
+    date.setDate(date.getDate() + operation);
+    const formattedDate = date.toISOString().slice(0, 10);
+
+    const result = await clickDate(formattedDate);
+
+    if (result) {
+      setApod(result.data);
+    }
+  };
+
+  const onChangeDate = async (propsDate: Date | null) => {
+    if (propsDate) {
+      const date = new Date(propsDate);
+      date.setDate(date.getDate());
+      const formattedDate = date.toISOString().slice(0, 10);
+      const result = await clickDate(formattedDate);
+
+      if (result && !result.error) {
+        setApod(result.data);
+      }
+
+      if (result.error) {
+        date.setDate(date.getDate() - 1);
+        const formattedDate = date.toISOString().slice(0, 10);
+        const result = await clickDate(formattedDate);
+        return setApod(result.data);
+      }
     }
   };
 
   const onClickLike = () => {
     setLiked(!liked);
 
-    addOrRemoveItemLocalStorage("likesApod", apod, liked);
+    addOrRemoveItemLocalStorage("likesApod", { ...apod, id: apod.date }, liked);
   };
+
+  if (isLoading || error || !data || !apod) {
+    return <></>;
+  }
 
   return (
     <div className="apod">
       <div className="info">
         <div className="info__header">
-          <span className="date">{apod.date}</span>
+          <DatePicker
+            selected={new Date(apod.date)}
+            onChange={(date) => onChangeDate(date)}
+            maxDate={new Date()}
+            minDate={new Date("1995/06/16")}
+            peekNextMonth
+            showMonthDropdown
+            showYearDropdown
+            className="date"
+            showPopperArrow={false}
+          />
+
           <div>
             <button
               className={`info__header__like ${liked ? "active" : ""}`}
@@ -82,11 +136,19 @@ export const Apod = () => {
         </div>
 
         <div className="buttons">
-          <button className="disabled" disabled>
+          <button
+            onClick={() => onClickNextorPrevDate(false)}
+            disabled={isDisabledBackDate}
+            className={`${isDisabledBackDate && "disabled"}`}
+          >
             prev
           </button>
-          <button onClick={onClickHandler}>random</button>
-          <button className="disabled" disabled>
+          <button onClick={onClickRandom}>random</button>
+          <button
+            onClick={() => onClickNextorPrevDate(true)}
+            disabled={isDisabledNextDate}
+            className={`${isDisabledNextDate && "disabled"}`}
+          >
             next
           </button>
         </div>
