@@ -35,18 +35,22 @@ export const addOrRemoveItemLocalStorage = <T extends { id: string }>(
 export const findObjectInLocalStorageArray = (
   storageKey: string,
   query: string
-): any | null => {
+): unknown | null => {
   const localStorageData = localStorage.getItem(storageKey);
-  let localStorageArray: any[] = [];
+  let localStorageArray: unknown[] = [];
 
   if (localStorageData !== null) {
     localStorageArray = JSON.parse(localStorageData);
   }
-  console.log("localStorageData", localStorageData);
-  const matchingObject = localStorageArray.find((object: any) => {
-    return Object.values(object).some((value: any) => {
-      return value.toString().toLowerCase().includes(query.toLowerCase());
-    });
+
+  const matchingObject = localStorageArray.find((object: unknown) => {
+    if (object) {
+      return Object.values(object).some((value: unknown) => {
+        if (value) {
+          return value.toString().toLowerCase().includes(query.toLowerCase());
+        }
+      });
+    }
   });
 
   if (!matchingObject) {

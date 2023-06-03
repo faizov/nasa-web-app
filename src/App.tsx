@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, Outlet, Link } from "react-router-dom";
-import { Apod } from "./features/apod/apod";
+import { ApodPage } from "./features/apod";
 
 import LogoDarkImg from "./assets/images/logo-dark.png";
 import LogoLightImg from "./assets/images/logo-light.png";
@@ -41,7 +41,7 @@ function App(): JSX.Element {
         </div>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Apod />} />
+            <Route index element={<ApodPage />} />
           </Route>
         </Routes>
       </div>

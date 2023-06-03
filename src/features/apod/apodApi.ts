@@ -1,26 +1,20 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import fetch from "../../utils/fetch";
 
-// Define a service using a base URL and expected endpoints
-export const apodApi = createApi({
-  reducerPath: "apodApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `https://api.nasa.gov/planetary`,
-  }),
-  endpoints: (builder) => ({
-    getApod: builder.query({
-      query: () => `/apod?api_key=${import.meta.env.VITE_API}`,
-    }),
-    getApodRandom: builder.query({
-      query: () => `/apod?api_key=${import.meta.env.VITE_API}&count=1`,
-    }),
-    getApodDate: builder.query({
-      query: (date) => `/apod?api_key=${import.meta.env.VITE_API}&date=${date}`,
-    }),
-  }),
-});
+const baseUrl = `https://api.nasa.gov/planetary/apod?api_key=${
+  import.meta.env.VITE_API
+}`;
 
-export const {
-  useGetApodQuery,
-  useLazyGetApodRandomQuery,
-  useLazyGetApodDateQuery,
-} = apodApi;
+export const fetchApod = (dateParam: string | null) => {
+  const query = dateParam ? `&date=${dateParam}` : "";
+  return fetch(baseUrl + query);
+};
+
+export const fetchApodDate = (formattedDate: string) => {
+  return fetch(baseUrl + `&date=${formattedDate}`);
+};
+
+export const fetchApodRandom = () => {
+  return fetch(baseUrl + "&count=1").then((res) => {
+    return res[0];
+  });
+};
