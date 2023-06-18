@@ -8,25 +8,20 @@ import {
   findObjectInLocalStorageArray,
 } from "../../utils/localStorage";
 
+import { TApod } from "./";
+
 import IconHeart from "../../assets/icons/icon-heart.svg";
 import IconHeartActive from "../../assets/icons/icon-heart-active.svg";
 
 import "./styles.scss";
-import { TApod } from "./";
 
 type Props = {
   data: TApod;
-  onClickNextOrPrevDate: (_: boolean) => void;
   onChangeDate: (_: Date | null) => void;
   onChangeRandom: () => void;
 };
 
-export const Apod = ({
-  data,
-  onClickNextOrPrevDate,
-  onChangeDate,
-  onChangeRandom,
-}: Props) => {
+export const Apod = ({ data, onChangeDate, onChangeRandom }: Props) => {
   const [liked, setLiked] = useState(false);
 
   const isDisabledNextDate =
@@ -41,6 +36,14 @@ export const Apod = ({
     }
   }, [data]);
 
+  const onClickNextOrPrevDate = (direction: boolean) => {
+    const operation = direction ? 1 : -1;
+    const date = new Date(data.date);
+    date.setDate(date.getDate() + operation);
+
+    onChangeDate(date);
+  };
+
   const onClickLike = () => {
     setLiked(!liked);
 
@@ -49,8 +52,8 @@ export const Apod = ({
 
   return (
     <div className="apod">
-      <div className="info">
-        <div className="info__header">
+      <div className="content">
+        <div className="select">
           <DatePicker
             selected={new Date(data.date)}
             onChange={(date) => onChangeDate(date)}
@@ -65,7 +68,7 @@ export const Apod = ({
 
           <div>
             <button
-              className={`info__header__like ${liked ? "active" : ""}`}
+              className={`like ${liked ? "active" : ""}`}
               onClick={() => onClickLike()}
             >
               <img src={liked ? IconHeartActive : IconHeart} alt="" />
@@ -78,7 +81,7 @@ export const Apod = ({
         </div>
 
         <div className="explanation">
-          <Scrollbars style={{ height: "100%" }}>
+          <Scrollbars className="scroll">
             <p>{data.explanation}</p>
           </Scrollbars>
         </div>
@@ -112,12 +115,7 @@ export const Apod = ({
           ) : (
             <iframe
               src={data.url}
-              style={{
-                overflow: "hidden",
-                height: "100%",
-                width: "100%",
-                border: "none",
-              }}
+              className="iframe"
               height="100%"
               width="100%"
             ></iframe>

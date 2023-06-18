@@ -59,3 +59,10 @@ export const findObjectInLocalStorageArray = (
 
   return matchingObject;
 };
+
+export const getAllArrayLocalStorage = (storageKey: string) => {
+  const localStorageData = localStorage.getItem(storageKey);
+  if (localStorageData) {
+    return JSON.parse(localStorageData);
+  }
+};

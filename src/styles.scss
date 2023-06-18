@@ -7,8 +7,16 @@
     --bg-color: #fff;
     --text-color: #000;
     --text-title-color: #19418c;
-    --hover-text-button: #f5f5f5;
-    --hover-button: #19418c;
+
+    // buttons
+    --button-background: #151418;
+    --button-hover-background: #19418c;
+    --button-text: #f5f5f5;
+    --button-hover-text: #f5f5f5;
+
+    //links
+    --links-color: #151418
+    --links-hover-color: #19418C
 }
 
 .dark-mode {
@@ -17,8 +25,16 @@
     --bg-color: #151418;
     --text-color: #fff;
     --text-title-color: #ffce00;
-    --hover-text-button: #222428;
-    --hover-button: #ffce00;
+
+    // buttons
+    --button-background: #f5f5f5;
+    --button-hover-background: #ffce00;
+    --button-text: #222428;
+    --button-hover-text: #222428;
+
+    //links
+    --links-color: #F5F5F5
+    --links-hover-color: #FFCE00
 }
 
 .btnThemeMode {
@@ -64,6 +80,14 @@ input {
     background: none;
 }
 
+a {
+    font-size: 1rem;
+    color: var(--links-color);
+    text-decoration: none;
+    font-weight: 700;
+    font-family: "Orbitron", sans-serif;
+}
+
 .App {
     width: 100vw;
     height: 100vh;
@@ -73,19 +97,8 @@ input {
 
     position: relative;
 
-    .header {
-        width: 45%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 40px;
-        padding-right: 0;
-
-        .logo {
-            img {
-                width: 110px;
-            }
-        }
+    .outlet {
+        padding: 0 40px;
     }
 }
 

@@ -35,23 +35,7 @@ export const ApodPage = () => {
     }
 
     fetchAndSetApod();
-  }, []);
-
-  const onClickNextOrPrevDate = async (direction: boolean) => {
-    if (apod) {
-      const date = new Date(apod.date);
-      const operation = direction ? 1 : -1;
-      date.setDate(date.getDate() + operation);
-      const formattedDate = date.toISOString().slice(0, 10);
-
-      const newApod = await fetchApodDate(formattedDate);
-
-      if (newApod) {
-        setApod(newApod);
-        setSearchParams({ date: newApod.date });
-      }
-    }
-  };
+  }, [dateParam]);
 
   const onChangeDate = async (propsDate: Date | null) => {
     if (propsDate) {
@@ -84,7 +68,6 @@ export const ApodPage = () => {
   return (
     <Apod
       data={apod}
-      onClickNextOrPrevDate={onClickNextOrPrevDate}
       onChangeDate={onChangeDate}
       onChangeRandom={onChangeRandom}
     />
