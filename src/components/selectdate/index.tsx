@@ -2,6 +2,8 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import "./style.scss";
+
 type Props = {
   date: Date | null;
   onChange: (_: Date | null) => void;

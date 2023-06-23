@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
-import ImageCuriosity from "../../assets/images/rovers/curiosity.png";
+import React, { ChangeEvent, useState } from "react";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import { SelectDate } from "../../components/selectdate";
 import { useFetch } from "usehooks-ts";
@@ -7,15 +7,7 @@ import { ListPhotos } from "./photos";
 
 import { roversList } from "./const";
 
-import "./styles.scss";
-import Scrollbars from "react-custom-scrollbars-2";
-
-type photos = {
-  cameras: string[];
-  earth_date: string;
-  sol: number;
-  total_photos: number;
-};
+import style from "./styles.module.scss";
 
 type RoverInfo = {
   photo_manifest: {
@@ -26,12 +18,12 @@ type RoverInfo = {
     max_sol: number;
     max_date: string;
     total_photos: number;
-    photos: photos[];
   };
 };
 
 export const MarsPage = () => {
   const [selectRover, setSelectRover] = useState(roversList[0]);
+  const [alert, setOpenAlert] = useState(false);
 
   const { data, error } = useFetch<RoverInfo>(
     `https://api.nasa.gov/mars-photos/api/v1/manifests/${
@@ -52,25 +44,29 @@ export const MarsPage = () => {
   };
 
   return (
-    <div className="mars">
+    <div className={style.mars}>
       <Scrollbars style={{ height: "80vh" }}>
-        <div className="select-rover">
-          <div className="avatar">
+        <div className={style.selectRover}>
+          <div className={style.avatar} onClick={() => setOpenAlert(!alert)}>
             <img src={selectRover.img} alt="rover" />
-            <span className="count-message">1</span>
+            <span className={style.countMessage}>1</span>
           </div>
 
-          <select onChange={(e) => onSelectRover(e)}>
-            {roversList.map((i) => {
-              return (
-                <option key={i.name} value={i.name}>
-                  {i.name}
-                </option>
-              );
-            })}
-          </select>
+          {!alert ? (
+            <select onChange={(e) => onSelectRover(e)}>
+              {roversList.map((i) => {
+                return (
+                  <option key={i.name} value={i.name}>
+                    {i.name}
+                  </option>
+                );
+              })}
+            </select>
+          ) : (
+            <div className={style.alert}>{selectRover.message}</div>
+          )}
 
-          {data && (
+          {!alert && data && (
             <SelectDate
               date={date || new Date(data.photo_manifest.max_date)}
               minDate={data.photo_manifest.landing_date}

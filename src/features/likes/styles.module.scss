@@ -2,7 +2,24 @@
     height: 100%;
     overflow: auto;
 
-    .list-item {
+    .categories {
+        margin: 20px 0;
+        display: flex;
+        gap: 10px;
+
+        button {
+            padding: 10px;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        button.active {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+        }
+    }
+
+    .listItems {
         display: flex;
         gap: 30px;
         flex-wrap: wrap;
@@ -59,8 +76,8 @@
     }
 }
 
-.not-found {
-    margin-top: 150px;
+.notFound {
+    margin-top: 20vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
