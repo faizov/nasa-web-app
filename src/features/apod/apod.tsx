@@ -12,6 +12,7 @@ import { TApod } from "./";
 
 import IconHeart from "../../assets/icons/icon-heart.svg";
 import IconHeartActive from "../../assets/icons/icon-heart-active.svg";
+import IconFull from "../../assets/icons/icon-full.svg";
 
 import "./styles.scss";
 
@@ -23,6 +24,7 @@ type Props = {
 
 export const Apod = ({ data, onChangeDate, onChangeRandom }: Props) => {
   const [liked, setLiked] = useState(false);
+  const [isFullImage, setFullImage] = useState(false);
 
   const isDisabledNextDate =
     data && new Date(data.date).toDateString() === new Date().toDateString();
@@ -104,23 +106,33 @@ export const Apod = ({ data, onChangeDate, onChangeRandom }: Props) => {
           </button>
         </div>
       </div>
-      <div className="media">
-        <a
-          href={data.hdurl || data.url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {data.media_type === "image" ? (
-            <img src={data.hdurl || data.url} alt="" loading="lazy" />
-          ) : (
-            <iframe
-              src={data.url}
-              className="iframe"
-              height="100%"
-              width="100%"
-            ></iframe>
-          )}
-        </a>
+      <div className={`media ${isFullImage ? "full" : ""}`}>
+        {data.media_type === "image" ? (
+          <div className="image">
+            <button onClick={() => setFullImage(!isFullImage)}>
+              <img src={IconFull} alt="full" width={24} />
+            </button>
+            <a
+              href={data.hdurl || data.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={data.hdurl || data.url}
+                alt=""
+                loading="lazy"
+                className="image-apod"
+              />
+            </a>
+          </div>
+        ) : (
+          <iframe
+            src={data.url}
+            className="iframe"
+            height="100%"
+            width="100%"
+          ></iframe>
+        )}
         {data.copyright && (
           <div className="credit">Copyright: {data.copyright}</div>
         )}

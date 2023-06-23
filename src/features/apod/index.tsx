@@ -1,13 +1,8 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Apod } from "./apod";
 import { useSearchParams } from "react-router-dom";
 
-import fetch from "../../utils/fetch";
 import { fetchApod, fetchApodDate, fetchApodRandom } from "./apodApi";
-
-const baseUrl = `https://api.nasa.gov/planetary/apod?api_key=${
-  import.meta.env.VITE_API
-}`;
 
 export type TApod = {
   date: string;
@@ -25,17 +20,17 @@ export const ApodPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const dateParam = searchParams.get("date");
 
-  useEffect(() => {
-    async function fetchAndSetApod() {
-      const apod = await fetchApod(dateParam);
-      if (apod) {
-        setApod(apod);
-        setSearchParams({ date: apod.date });
-      }
+  const fetchData = useCallback(async () => {
+    const apod = await fetchApod(dateParam);
+    if (apod) {
+      setApod(apod);
+      setSearchParams({ date: apod.date });
     }
-
-    fetchAndSetApod();
   }, [dateParam]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const onChangeDate = async (propsDate: Date | null) => {
     if (propsDate) {

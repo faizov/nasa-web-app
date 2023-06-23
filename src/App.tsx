@@ -4,8 +4,9 @@ import { Routes, Route, Outlet } from "react-router-dom";
 import { ApodPage } from "./features/apod";
 import LikesPage from "./features/likes";
 
-import "./styles.scss";
+import "./global.scss";
 import { NavMenu } from "./components/navmenu";
+import { MarsPage } from "./features/mars";
 
 function App(): JSX.Element {
   const savedDarkMode = JSON.parse(localStorage.getItem("darkMode") ?? "false");
@@ -29,7 +30,8 @@ function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<ApodPage />} />
-            <Route path="likes" index element={<LikesPage />} />
+            <Route path="/likes" index element={<LikesPage />} />
+            <Route path="/mars" index element={<MarsPage />} />
           </Route>
         </Routes>
       </div>

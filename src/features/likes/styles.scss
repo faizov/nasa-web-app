@@ -1,51 +1,60 @@
 .likes {
-    display: flex;
+    height: 100%;
+    overflow: auto;
 
-    gap: 30px;
-    flex-wrap: wrap;
+    .list-item {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
 
-    .item {
-        position: relative;
+        .item {
+            position: relative;
 
-        .image {
-            width: 330px;
-            height: 200px;
-            cursor: pointer;
-            border-radius: 5px;
+            .image {
+                width: 330px;
+                height: 200px;
+                cursor: pointer;
+                border-radius: 5px;
 
-            object-fit: cover;
-        }
+                object-fit: cover;
+            }
 
-        .video {
-            width: 330px;
-            height: 200px;
-            cursor: pointer;
-            border-radius: 5px;
+            .video {
+                width: 330px;
+                height: 200px;
+                cursor: pointer;
+                border-radius: 5px;
 
-            background-color: var(--secondary-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+                background-color: var(--secondary-color);
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
-        .delete {
-            display: none;
-        }
+                p {
+                    padding: 40px;
+                    text-align: center;
+                }
+            }
 
-        &:hover .delete {
-            position: absolute;
-            top: 12px;
-            right: 12px;
+            .delete {
+                display: none;
+            }
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            &:hover .delete {
+                position: absolute;
+                top: 12px;
+                right: 12px;
 
-            width: 47px;
-            height: 47px;
-            background: rgba(35, 44, 62, 0.6);
-            border-radius: 5px;
-            cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                width: 47px;
+                height: 47px;
+                background: rgba(35, 44, 62, 0.6);
+                border-radius: 5px;
+                cursor: pointer;
+            }
         }
     }
 }

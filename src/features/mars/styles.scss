@@ -1,0 +1,55 @@
+.select-rover {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 40px 0;
+
+    .avatar {
+        position: relative;
+        cursor: pointer;
+
+        img {
+            width: 124px;
+        }
+
+        .count-message {
+            position: absolute;
+            top: 5px;
+            right: 0px;
+
+            width: 32px;
+            height: 32px;
+            background: #e8432d;
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    select {
+        padding: 10px;
+    }
+}
+
+.photos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    height: 100%;
+
+    .item {
+        width: 350px;
+        height: 200px;
+        // margin-bottom: 10px;
+
+        img {
+            height: 100%;
+            width: 100%;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+    }
+}
