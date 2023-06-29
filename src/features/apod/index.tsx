@@ -4,6 +4,8 @@ import { useSearchParams } from "react-router-dom";
 
 import { fetchApod, fetchApodDate, fetchApodRandom } from "./apodApi";
 
+import { getParsingApod } from "../../utils/parsingApod";
+
 export type TApod = {
   date: string;
   explanation: string;
@@ -19,6 +21,8 @@ export const ApodPage = () => {
   const [apod, setApod] = useState<TApod>();
   const [searchParams, setSearchParams] = useSearchParams();
   const dateParam = searchParams.get("date");
+
+  getParsingApod();
 
   const fetchData = useCallback(async () => {
     const apod = await fetchApod(dateParam);
